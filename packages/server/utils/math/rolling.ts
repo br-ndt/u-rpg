@@ -10,7 +10,7 @@ interface hasSourceTable {
   sourceTable: any[];
 }
 
-interface ProbabilityTable extends hasProb, hasSourceTable {};
+interface ProbabilityTable extends hasProb, hasSourceTable {}
 
 type RollTable = ProbabilityTable;
 
@@ -29,11 +29,7 @@ type GetSubRanges = hasProb & {
 };
 
 function rollingMean(arr: number[]) {
-  let out = [];
-  for (let i = 0; i < arr.length - 1; ++i) {
-    out.push((arr[i] + arr[i + 1]) / 2);
-  }
-  return out;
+  return arr.map((entry) => (arr[entry] + arr[entry + 1]) / 2);
 }
 
 export function rollTable({ sourceTable, prob }: RollTable) {
