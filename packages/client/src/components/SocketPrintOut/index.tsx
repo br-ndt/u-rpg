@@ -20,7 +20,7 @@ export default function SocketPrintOut() {
 
     console.log("socketPrintOut");
     console.log(socket);
-    if (socket.id && isConnected) {
+    if (socket?.id && isConnected) {
       console.log("has id");
       fetchKey(socket.id);
     }
@@ -30,7 +30,7 @@ export default function SocketPrintOut() {
     <>
       {Boolean(thing) && `Hello I like ${thing}`}
       <br />
-      {socket.id}
+      {socket?.id}
     </>
   );
 }

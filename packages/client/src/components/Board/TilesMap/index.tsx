@@ -14,17 +14,17 @@ export default function TilesMap({}: TilesMapProps) {
   return (
     <>
       {Object.keys(tiles).map((row) => {
-        const x = parseInt(row);
+        const y = parseInt(row);
         return (
           <div className={styles.tileRow}>
-            {Object.keys(tiles[x]).map((column) => {
+            {Object.keys(tiles[y]).map((column) => {
               ++tileId;
-              const y = parseInt(column);
+              const x = parseInt(column);
               return (
                 <Tile x={x} y={y} id={tileId}>
-                  {tiles[x][y].isOccupied && (
+                  {tiles[x][y]?.occupantId && (
                     <Token
-                      id={tiles[x][y].occupantId}
+                      id={tiles[x][y]?.occupantId!}
                       tileId={tileId}
                       x={x}
                       y={y}

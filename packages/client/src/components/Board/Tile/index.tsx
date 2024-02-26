@@ -15,18 +15,15 @@ type TileProps = {
   id: number;
 };
 
-interface DraggedToken {
+interface DraggedToken extends Coordinates {
   id: number;
   type: string;
   tileId: number;
-  x: number;
-  y: number;
 }
 
 export default function Tile({ x, y, children, id }: TileProps) {
   const { popMenu } = useMouse();
   const { attemptMove } = useSocket();
-  const { clearOccupant, setOccupant } = useBoard();
   const [{ isOver, canDrop }, dropRef] = useDrop(
     () => ({
       accept: itemTypes.TOKEN,
@@ -37,9 +34,7 @@ export default function Tile({ x, y, children, id }: TileProps) {
         return tan < 5;
       },
       drop: (item: DraggedToken) => {
-        clearOccupant({ x: item.x, y: item.y });
-        setOccupant({ x, y }, item.id);
-        attemptMove({ x, y });
+        attemptMove?.({ ...(item as Coordinates) }, { x, y });
       }, // game.move
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),

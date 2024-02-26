@@ -11,13 +11,13 @@ export default function App() {
   return (
     <div className={styles.app}>
       <ThemeProvider>
-        <MouseEventProvider>
-          <SocketProvider>
-            <AppLayout>
+        <SocketProvider>
+          <AppLayout>
+            <MouseEventProvider>
               <Board />
-            </AppLayout>
-          </SocketProvider>
-        </MouseEventProvider>
+            </MouseEventProvider>
+          </AppLayout>
+        </SocketProvider>
       </ThemeProvider>
     </div>
   );

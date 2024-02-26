@@ -23,10 +23,10 @@ export default function Chat() {
   ]);
 
   useEffect(() => {
-    socket.on("message broadcast", (message: Omit<Message, "isSender">) => {
+    socket?.on("message broadcast", (message: Omit<Message, "isSender">) => {
       const parsedMessage: Message = {
         text: message.text,
-        id: message.id.slice(0, 4),
+        id: message?.id?.slice(0, 4),
         colorOverride: message.id === socket.id ? "lime" : undefined,
       };
       setMessages([...messages, parsedMessage]);

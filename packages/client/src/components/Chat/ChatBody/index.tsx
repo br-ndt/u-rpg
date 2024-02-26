@@ -17,13 +17,14 @@ export default function ChatBody({ messages }: ChatBodyProps) {
           key={index}
           colorOverride={message.colorOverride}
           onContextMenu={(event) => {
-            popMenu(event, {
-              type: "chat",
-              values: {
-                id: message.id,
-                socketId: message.id,
-              },
-            });
+            message?.id &&
+              popMenu(event, {
+                type: "chat",
+                values: {
+                  id: message.id,
+                  socketId: message.id,
+                },
+              });
           }}
         >
           {`${message.id ? `${message.id}: ` : ""}${message.text}`}

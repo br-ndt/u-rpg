@@ -10,7 +10,7 @@ import React, {
 import { PopMenu, FocusedInfo } from "../../components";
 
 type MouseEventContextType = {
-  focus: FocusTarget;
+  focus: FocusTarget | null;
   popMenu: (
     event: React.MouseEvent<HTMLElement, MouseEvent>,
     pop: PopMenu
@@ -101,11 +101,10 @@ const popEntriesMap: Record<PopType, PopMenuEntry[]> = {
 };
 
 export function MouseEventProvider({ children }: MouseEventContextProps) {
-  const [focus, setFocus] = useState<FocusTarget>();
+  const [focus, setFocus] = useState<FocusTarget | null>(null);
   const [menuState, setMenuState] = useState<PopMenuState>(initialMenuState);
 
   const leftDefault = useCallback((event: MouseEvent) => {
-    event.preventDefault();
     setFocus(null);
     setMenuState(initialMenuState);
   }, []);
@@ -169,7 +168,7 @@ export function MouseEventProvider({ children }: MouseEventContextProps) {
       <MouseEventContext.Provider value={{ focus, popMenu, selectFocus }}>
         {children}
       </MouseEventContext.Provider>
-      {focus && (
+      {focus?.info && (
         <FocusedInfo>
           <div>
             <h3>{focus?.info?.name || ""}</h3>
@@ -183,7 +182,7 @@ export function MouseEventProvider({ children }: MouseEventContextProps) {
       {menuState.show && (
         <PopMenu {...menuState}>
           {menuState?.title && <h2>{menuState.title}</h2>}
-          {menuState.entries.map((entry) =>
+          {menuState?.entries?.map((entry) =>
             focus ? (
               <p
                 onClick={(e: React.MouseEvent) => {

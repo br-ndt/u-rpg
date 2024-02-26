@@ -10,16 +10,21 @@ import { io, Socket } from "socket.io-client";
 
 export type SocketContextType = {
   socket?: Socket;
-  isConnected?: boolean;
-  attemptMove?: (coords: Coordinates) => void;
-  sendChat?: (text: string) => void;
+  isConnected: boolean;
+  attemptMove: (fromCoords: Coordinates, toCoords: Coordinates) => void;
+  sendChat: (text: string) => void;
 };
 
 export type SocketProviderProps = {
   children?: ReactNode;
 };
 
-export const SocketContext = createContext<SocketContextType>({});
+export const SocketContext = createContext<SocketContextType>({
+  socket: undefined,
+  isConnected: false,
+  attemptMove: () => {},
+  sendChat: () => {},
+});
 
 const socket = io();
 export function SocketProvider({ children }: SocketProviderProps) {
@@ -38,10 +43,23 @@ export function SocketProvider({ children }: SocketProviderProps) {
     };
   }, []);
 
-  const attemptMove = useCallback((coords: Coordinates) => {
-    if (socket && socket.connected)
-      socket.emit("chat message", `Made a move to ${coords.x},${coords.y}`);
-  }, []);
+  const attemptMove = useCallback(
+    (fromCoords: Coordinates, toCoords: Coordinates) => {
+      if (socket && socket.connected) {
+        socket.emit(
+          "actor move",
+          { id: 1, name: "Pebberdunker", size: "Small" },
+          fromCoords,
+          toCoords
+        );
+        socket.emit(
+          "chat message",
+          `Made a move from ${fromCoords.x},${fromCoords.y} to ${toCoords.x},${toCoords.y}`
+        );
+      }
+    },
+    [socket]
+  );
 
   const sendChat = useCallback(
     (text: string) => {

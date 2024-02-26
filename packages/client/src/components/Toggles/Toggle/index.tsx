@@ -4,7 +4,7 @@ import styles from "./Toggle.module.scss";
 
 type ToggleProps = {
   className?: string;
-  onToggle: (event?: MouseEvent) => void;
+  onToggle: (event: MouseEvent) => void;
   on: boolean;
   children?: ReactNode;
 };
