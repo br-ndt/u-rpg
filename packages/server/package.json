@@ -4,7 +4,7 @@
   "main": "./index.ts",
   "type": "module",
   "scripts": {
-    "start": "ts-node --esm ./index.ts",
+    "start": "node --loader ts-node/esm ./index.ts",
     "dev": "nodemon ./index.ts"
   },
   "author": "Varun Nadgir, Tyler Brandt, Graham Gilpatric",

@@ -1,19 +1,25 @@
 {
   "compilerOptions": {
-    "module": "ES2022",
+    "strict": true,
+    "module": "ESNext",
     "esModuleInterop": true,
     "target": "ES6",
     "allowJs": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "sourceMap": true,
     "outDir": "./dist/",
     "baseUrl": "./packages/server",
     "paths": {
-      "*": ["node_modules/*", "types/*"]
+      "*": ["node_modules/*", "packages/server/types/*"]
     }
+  },
+  "ts-node": {
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true,
+    "esm": true,
   },
   "include": ["./declaration.d.ts", "packages/**/*"]
 }
