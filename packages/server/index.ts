@@ -6,6 +6,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { Server } from "socket.io";
 
+import { DEFAULT_MAP_HEIGHT, DEFAULT_MAP_WIDTH } from "./constants/board.js";
+import { sizeRecord } from "./constants/entities.js";
 import rootRouter from "./routes/rootRouter.js";
 import { chatMessageSerializer, actorMoveSerializer } from "./serializers";
 import { clearOccupied, generateMap, setOccupied } from "./utils";
@@ -33,10 +35,20 @@ app.use(rootRouter);
 
 const server = http.createServer(app);
 const io = new Server(server);
+const grid = generateMap(DEFAULT_MAP_WIDTH, DEFAULT_MAP_HEIGHT);
+for (let i = 0; i < DEFAULT_MAP_HEIGHT * DEFAULT_MAP_WIDTH; ++i) {
+  const tile = await knex("tiles")
+    .returning("id")
+    .insert({
+      mapId: map,
+      occupantId: null,
+      x: i % DEFAULT_MAP_WIDTH,
+      y: i / DEFAULT_MAP_HEIGHT,
+    });
+}
+const Pebberdunker: Actor = { id: 1, name: "Pebberdunker", size: "Small" };
 
-const grid = generateMap(10, 10);
-
-setOccupied({ id: 1, name: "Pebberdunker", size: "Small" }, grid, {
+setOccupied(Pebberdunker, grid, {
   x: 4,
   y: 3,
 });
@@ -54,7 +66,8 @@ io.on("connection", (socket) => {
   socket.on(
     "actor move",
     (actor: Actor, fromCoords: Coordinates, toCoords: Coordinates) => {
-      if (actorMoveSerializer(actor, grid, toCoords)) { //TODO: make serializer care about fromCoords
+      if (actorMoveSerializer(actor, grid, toCoords)) {
+        //TODO: make serializer care about fromCoords
         clearOccupied(grid, fromCoords);
         setOccupied(actor, grid, toCoords);
         io.emit("chat message", `Made a move to ${toCoords.x},${toCoords.y}`);
